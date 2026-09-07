@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swift for Coding Interviews</title>
+<meta name="description" content="A practical, code-first reference for Swift data structures, algorithms, and interview problems.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<style>
+  :root{
+    --bg:#f7f7f9; --panel:#ffffff; --text:#1c1e21; --muted:#5b6270;
+    --border:#e3e5e9; --accent:#f05138; --accent-ink:#ffffff;
+    --code-bg:#282c34; --link:#c2410c;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#14161a; --panel:#1c1f24; --text:#eceef1; --muted:#9aa2b1;
+      --border:#2b2f36; --accent:#ff7a5c; --accent-ink:#14161a;
+      --code-bg:#1a1c20; --link:#ff9166;
+    }
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.6;
+  }
+  a{color:var(--link);}
+  code{font-family:"SF Mono",Menlo,Consolas,monospace;}
+  pre{border-radius:10px; overflow-x:auto; font-size:0.86rem;}
+  pre code.hljs{padding:16px !important; background:var(--code-bg) !important; border-radius:10px;}
+
+  header.site{
+    padding:56px 24px 32px; text-align:center;
+    border-bottom:1px solid var(--border);
+    background:linear-gradient(180deg, rgba(240,81,56,0.08), transparent);
+  }
+  header.site h1{margin:0 0 8px; font-size:2.1rem;}
+  header.site p{margin:0; color:var(--muted); max-width:640px; margin-inline:auto;}
+  header.site .badge{
+    display:inline-block; margin-top:16px; padding:4px 12px; border-radius:999px;
+    background:var(--accent); color:var(--accent-ink); font-weight:600; font-size:0.8rem;
+  }
+
+  .layout{ display:flex; max-width:1200px; margin:0 auto; align-items:flex-start; }
+  nav.toc{
+    position:sticky; top:0; align-self:flex-start;
+    width:250px; flex-shrink:0; padding:32px 16px; max-height:100vh; overflow-y:auto;
+  }
+  nav.toc a{
+    display:block; padding:6px 10px; border-radius:8px; color:var(--text);
+    text-decoration:none; font-size:0.92rem;
+  }
+  nav.toc a:hover{background:var(--panel);}
+  nav.toc .group-title{
+    text-transform:uppercase; font-size:0.72rem; letter-spacing:0.05em;
+    color:var(--muted); margin:18px 0 4px; padding:0 10px;
+  }
+  nav.toc .group-title:first-child{margin-top:0;}
+
+  main{flex:1; min-width:0; padding:32px 24px 80px;}
+  section.card{
+    background:var(--panel); border:1px solid var(--border); border-radius:14px;
+    padding:24px 28px; margin-bottom:24px;
+  }
+  section.card h2{margin-top:0; font-size:1.4rem;}
+  section.card h3{font-size:1.05rem; margin-bottom:6px;}
+  .sub{margin-top:28px;}
+  .sub:first-of-type{margin-top:0;}
+  p.lead{color:var(--muted); margin-top:-4px;}
+
+  table{border-collapse:collapse; width:100%; margin:12px 0;}
+  th,td{text-align:left; padding:8px 12px; border-bottom:1px solid var(--border); font-size:0.9rem;}
+  th{color:var(--muted); font-weight:600;}
+  tr:last-child td{border-bottom:none;}
+  code.inline{background:var(--border); padding:1px 6px; border-radius:5px; font-size:0.85em;}
+
+  .tag{
+    display:inline-block; font-size:0.72rem; font-weight:700; letter-spacing:0.03em;
+    padding:2px 8px; border-radius:6px; margin-left:8px; vertical-align:middle;
+    background:rgba(240,81,56,0.14); color:var(--accent);
+  }
+  .note{
+    border-left:3px solid var(--accent); background:rgba(240,81,56,0.06);
+    padding:10px 14px; border-radius:0 8px 8px 0; margin:14px 0; font-size:0.92rem;
+  }
+  footer{text-align:center; padding:32px; color:var(--muted); font-size:0.85rem;}
+
+  #topbar{
+    display:none; position:sticky; top:0; z-index:10; background:var(--bg);
+    border-bottom:1px solid var(--border); padding:10px 16px;
+  }
+  #topbar select{
+    width:100%; padding:8px; border-radius:8px; border:1px solid var(--border);
+    background:var(--panel); color:var(--text);
+  }
+
+  @media (max-width:880px){
+    nav.toc{display:none;}
+    #topbar{display:block;}
+    main{padding:20px 16px 60px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <h1>Swift for Coding Interviews</h1>
+  <p>A code-first reference: Swift language essentials, core data structures, classic algorithms, and worked interview problems — every example in real, runnable Swift.</p>
+  <span class="badge">Swift 5.9+</span>
+</header>
+
+<div id="topbar">
+  <select onchange="if(this.value) location.hash=this.value;">
+    <option value="">Jump to section…</option>
+    <option value="#bigo">Big-O Cheat Sheet</option>
+    <option value="#fundamentals">Swift Fundamentals</option>
+    <option value="#arrays-strings">Arrays &amp; Strings</option>
+    <option value="#stack-queue">Stack &amp; Queue</option>
+    <option value="#linked-list">Linked List</option>
+    <option value="#trees">Trees &amp; BST</option>
+    <option value="#trie">Trie</option>
+    <option value="#heap">Heap / Priority Queue</option>
+    <option value="#graph">Graph</option>
+    <option value="#sorting">Sorting</option>
+    <option value="#searching">Binary Search</option>
+    <option value="#two-pointers">Two Pointers &amp; Sliding Window</option>
+    <option value="#recursion">Recursion &amp; Backtracking</option>
+    <option value="#dp">Dynamic Programming</option>
+    <option value="#problems">Practice Problems</option>
+    <option value="#gotchas">Swift Gotchas</option>
+  </select>
+</div>
+
+<div class="layout">
+  <nav class="toc">
+    <div class="group-title">Orientation</div>
+    <a href="#bigo">Big-O Cheat Sheet</a>
+    <a href="#fundamentals">Swift Fundamentals</a>
+
+    <div class="group-title">Data Structures</div>
+    <a href="#arrays-strings">Arrays &amp; Strings</a>
+    <a href="#stack-queue">Stack &amp; Queue</a>
+    <a href="#linked-list">Linked List</a>
+    <a href="#trees">Trees &amp; BST</a>
+    <a href="#trie">Trie</a>
+    <a href="#heap">Heap / Priority Queue</a>
+    <a href="#graph">Graph</a>
+
+    <div class="group-title">Algorithms</div>
+    <a href="#sorting">Sorting</a>
+    <a href="#searching">Binary Search</a>
+    <a href="#two-pointers">Two Pointers &amp; Sliding Window</a>
+    <a href="#recursion">Recursion &amp; Backtracking</a>
+    <a href="#dp">Dynamic Programming</a>
+
+    <div class="group-title">Practice</div>
+    <a href="#problems">Interview Problems</a>
+    <a href="#gotchas">Swift Gotchas</a>
+  </nav>
+
+  <main>
+
+    <section class="card" id="bigo">
+      <h2>Big-O Cheat Sheet</h2>
+      <p class="lead">Complexity of Swift's standard collections — know these cold, they come up in almost every interview.</p>
+      <table>
+        <tr><th>Collection</th><th>Access</th><th>Search</th><th>Insert</th><th>Remove</th><th>Notes</th></tr>
+        <tr><td><code class="inline">Array</code></td><td>O(1)</td><td>O(n)</td><td>O(1) amortized at end, O(n) at front/middle</td><td>O(n)</td><td>Contiguous storage, value type with copy-on-write</td></tr>
+        <tr><td><code class="inline">Dictionary</code></td><td>—</td><td>O(1) avg</td><td>O(1) avg</td><td>O(1) avg</td><td>Hash-based; requires <code class="inline">Hashable</code> keys</td></tr>
+        <tr><td><code class="inline">Set</code></td><td>—</td><td>O(1) avg</td><td>O(1) avg</td><td>O(1) avg</td><td>No duplicates, no order guarantee</td></tr>
+        <tr><td><code class="inline">String</code></td><td>O(1) for <code class="inline">first</code>/<code class="inline">last</code></td><td>O(n)</td><td>O(n)</td><td>O(n)</td><td>Grapheme-cluster indexing is O(n), not O(1)</td></tr>
+      </table>
+      <table>
+        <tr><th>Algorithm</th><th>Time</th><th>Space</th></tr>
+        <tr><td>Binary Search</td><td>O(log n)</td><td>O(1)</td></tr>
+        <tr><td>Merge Sort</td><td>O(n log n)</td><td>O(n)</td></tr>
+        <tr><td>Quick Sort</td><td>O(n log n) avg, O(n²) worst</td><td>O(log n)</td></tr>
+        <tr><td>BFS / DFS</td><td>O(V + E)</td><td>O(V)</td></tr>
+        <tr><td>Dijkstra (heap)</td><td>O((V + E) log V)</td><td>O(V)</td></tr>
+      </table>
+    </section>
+
+    <section class="card" id="fundamentals">
+      <h2>Swift Fundamentals for Interviews</h2>
+      <p class="lead">The language quirks interviewers expect you to reason about, beyond generic CS knowledge.</p>
+
+      <div class="sub">
+        <h3>Value vs. reference types</h3>
+        <p><code class="inline">struct</code>/<code class="inline">enum</code> are value types (copied on assignment, copy-on-write for collections); <code class="inline">class</code> is a reference type (shared, ARC-managed). Interview implication: a linked list node or tree node is almost always a <code class="inline">class</code>, so multiple references can point at the same node.</p>
+      </div>
+
+      <div class="sub">
+        <h3>Optionals</h3>
+        <pre><code class="language-swift">func firstEven(_ nums: [Int]) -> Int? {
+    for n in nums where n % 2 == 0 { return n }
+    return nil
+}
+
+if let value = firstEven([1, 3, 4, 5]) {
+    print(value)          // 4
+}
+
+let value = firstEven([1, 3, 5]) ?? -1   // nil-coalescing
+</code></pre>
+        <p>Prefer <code class="inline">guard let</code> for early exits and avoid force-unwrapping (<code class="inline">!</code>) unless you've just proven the value exists.</p>
+      </div>
+
+      <div class="sub">
+        <h3>Closures &amp; higher-order functions</h3>
+        <pre><code class="language-swift">let nums = [5, 3, 8, 1]
+let doubled = nums.map { $0 * 2 }
+let evens = nums.filter { $0 % 2 == 0 }
+let sum = nums.reduce(0, +)
+let sorted = nums.sorted { $0 < $1 }
+</code></pre>
+      </div>
+
+      <div class="sub">
+        <h3>Generics &amp; protocols</h3>
+        <pre><code class="language-swift">func swapValues&lt;T&gt;(_ a: inout T, _ b: inout T) {
+    let temp = a
+    a = b
+    b = temp
+}
+
+protocol Stack {
+    associatedtype Element
+    mutating func push(_ item: Element)
+    mutating func pop() -> Element?
+}
+</code></pre>
+        <p>Custom types used as dictionary keys or set elements must conform to <code class="inline">Hashable</code> (which requires <code class="inline">Equatable</code>).</p>
+      </div>
+    </section>
+
+    <section class="card" id="arrays-strings">
+      <h2>Arrays &amp; Strings <span class="tag">DATA STRUCTURE</span></h2>
+      <pre><code class="language-swift">var arr = [1, 2, 3]
+arr.append(4)              // O(1) amortized
+arr.insert(0, at: 0)       // O(n)
+arr.remove(at: 1)          // O(n)
+let slice = arr[1...2]     // ArraySlice, shares storage
+
+// Reverse a string in place, respecting Unicode grapheme clusters
+func reverse(_ s: String) -> String {
+    String(s.reversed())
+}
+
+// Two arrays of characters, without index arithmetic on String
+func isAnagram(_ a: String, _ b: String) -> Bool {
+    a.count == b.count && a.sorted() == b.sorted()
+}
+</code></pre>
+      <div class="note">Strings are collections of <code class="inline">Character</code> (extended grapheme clusters), not bytes — <code class="inline">s[i]</code> integer subscripting doesn't exist. Convert to <code class="inline">Array(s)</code> first if you need repeated random access.</div>
+    </section>
+
+    <section class="card" id="stack-queue">
+      <h2>Stack &amp; Queue <span class="tag">DATA STRUCTURE</span></h2>
+      <pre><code class="language-swift">struct Stack&lt;T&gt; {
+    private var items: [T] = []
+    var isEmpty: Bool { items.isEmpty }
+    mutating func push(_ item: T) { items.append(item) }
+    mutating func pop() -> T? { items.popLast() }
+    func peek() -> T? { items.last }
+}
+
+struct Queue&lt;T&gt; {
+    private var items: [T] = []
+    mutating func enqueue(_ item: T) { items.append(item) }
+    mutating func dequeue() -> T? {
+        items.isEmpty ? nil : items.removeFirst()   // O(n); use two stacks or a deque for O(1)
+    }
+}
+</code></pre>
+      <div class="note"><code class="inline">removeFirst()</code> on <code class="inline">Array</code> is O(n). For an O(1) queue, use two stacks (amortized O(1)) or Swift Collections' <code class="inline">Deque</code>.</div>
+    </section>
+
+    <section class="card" id="linked-list">
+      <h2>Linked List <span class="tag">DATA STRUCTURE</span></h2>
+      <pre><code class="language-swift">final class ListNode {
+    var val: Int
+    var next: ListNode?
+    init(_ val: Int, _ next: ListNode? = nil) {
+        self.val = val
+        self.next = next
+    }
+}
+
+func reverseList(_ head: ListNode?) -> ListNode? {
+    var prev: ListNode? = nil
+    var current = head
+    while let node = current {
+        let next = node.next
+        node.next = prev
+        prev = node
+        current = next
+    }
+    return prev
+}
+
+// Floyd's cycle detection
+func hasCycle(_ head: ListNode?) -> Bool {
+    var slow = head, fast = head
+    while fast != nil && fast?.next != nil {
+        slow = slow?.next
+        fast = fast?.next?.next
+        if slow === fast { return true }
+    }
+    return false
+}
+</code></pre>
+    </section>
+
+    <section class="card" id="trees">
+      <h2>Trees &amp; Binary Search Trees <span class="tag">DATA STRUCTURE</span></h2>
+      <pre><code class="language-swift">final class TreeNode {
+    var val: Int
+    var left: TreeNode?
+    var right: TreeNode?
+    init(_ val: Int) { self.val = val }
+}
+
+func inorder(_ node: TreeNode?, _ result: inout [Int]) {
+    guard let node else { return }
+    inorder(node.left, &result)
+    result.append(node.val)
+    inorder(node.right, &result)
+}
+
+func insert(_ root: TreeNode?, _ val: Int) -> TreeNode {
+    guard let root else { return TreeNode(val) }
+    if val < root.val { root.left = insert(root.left, val) }
+    else { root.right = insert(root.right, val) }
+    return root
+}
+
+func isBalanced(_ root: TreeNode?) -> Bool {
+    func height(_ node: TreeNode?) -> Int {
+        guard let node else { return 0 }
+        let l = height(node.left), r = height(node.right)
+        if l == -1 || r == -1 || abs(l - r) > 1 { return -1 }
+        return max(l, r) + 1
+    }
+    return height(root) != -1
+}
+</code></pre>
+    </section>
+
+    <section class="card" id="trie">
+      <h2>Trie <span class="tag">DATA STRUCTURE</span></h2>
+      <pre><code class="language-swift">final class TrieNode {
+    var children: [Character: TrieNode] = [:]
+    var isWord = false
+}
+
+final class Trie {
+    private let root = TrieNode()
+
+    func insert(_ word: String) {
+        var node = root
+        for char in word {
+            node = node.children[char] ?? {
+                let newNode = TrieNode()
+                node.children[char] = newNode
+                return newNode
+            }()
+        }
+        node.isWord = true
+    }
+
+    func search(_ word: String) -> Bool {
+        node(for: word)?.isWord ?? false
+    }
+
+    func startsWith(_ prefix: String) -> Bool {
+        node(for: prefix) != nil
+    }
+
+    private func node(for word: String) -> TrieNode? {
+        var node = root
+        for char in word {
+            guard let next = node.children[char] else { return nil }
+            node = next
+        }
+        return node
+    }
+}
+</code></pre>
+    </section>
+
+    <section class="card" id="heap">
+      <h2>Heap / Priority Queue <span class="tag">DATA STRUCTURE</span></h2>
+      <p class="lead">The standard library has no built-in heap. Model one with an array and sift operations.</p>
+      <pre><code class="language-swift">struct MinHeap&lt;T: Comparable&gt; {
+    private var items: [T] = []
+    var isEmpty: Bool { items.isEmpty }
+    var count: Int { items.count }
+    var peek: T? { items.first }
+
+    mutating func insert(_ value: T) {
+        items.append(value)
+        siftUp(from: items.count - 1)
+    }
+
+    mutating func extractMin() -> T? {
+        guard !items.isEmpty else { return nil }
+        items.swapAt(0, items.count - 1)
+        let min = items.removeLast()
+        siftDown(from: 0)
+        return min
+    }
+
+    private mutating func siftUp(from index: Int) {
+        var child = index
+        while child > 0 {
+            let parent = (child - 1) / 2
+            if items[child] < items[parent] {
+                items.swapAt(child, parent)
+                child = parent
+            } else { break }
+        }
+    }
+
+    private mutating func siftDown(from index: Int) {
+        var parent = index
+        while true {
+            let left = 2 * parent + 1, right = 2 * parent + 2
+            var smallest = parent
+            if left < items.count && items[left] < items[smallest] { smallest = left }
+            if right < items.count && items[right] < items[smallest] { smallest = right }
+            if smallest == parent { break }
+            items.swapAt(parent, smallest)
+            parent = smallest
+        }
+    }
+}
+</code></pre>
+      <div class="note">For contest-speed code, Swift's <code class="inline">Array</code> combined with sorting is often "good enough," but a real heap is the expected answer for "kth largest," "merge k lists," or "top-k" problems.</div>
+    </section>
+
+    <section class="card" id="graph">
+      <h2>Graph (BFS / DFS) <span class="tag">DATA STRUCTURE</span></h2>
+      <pre><code class="language-swift">// Adjacency list
+var graph: [Int: [Int]] = [
+    0: [1, 2],
+    1: [0, 3],
+    2: [0, 3],
+    3: [1, 2]
+]
+
+func bfs(_ start: Int, _ graph: [Int: [Int]]) -> [Int] {
+    var visited: Set&lt;Int&gt; = [start]
+    var queue = [start]
+    var order: [Int] = []
+    var head = 0
+    while head < queue.count {
+        let node = queue[head]; head += 1
+        order.append(node)
+        for neighbor in graph[node] ?? [] where !visited.contains(neighbor) {
+            visited.insert(neighbor)
+            queue.append(neighbor)
+        }
+    }
+    return order
+}
+
+func dfs(_ node: Int, _ graph: [Int: [Int]], _ visited: inout Set&lt;Int&gt;, _ order: inout [Int]) {
+    guard !visited.contains(node) else { return }
+    visited.insert(node)
+    order.append(node)
+    for neighbor in graph[node] ?? [] {
+        dfs(neighbor, graph, &visited, &order)
+    }
+}
+</code></pre>
+    </section>
+
+    <section class="card" id="sorting">
+      <h2>Sorting</h2>
+      <pre><code class="language-swift">// Merge sort — stable, O(n log n)
+func mergeSort(_ arr: [Int]) -> [Int] {
+    guard arr.count > 1 else { return arr }
+    let mid = arr.count / 2
+    let left = mergeSort(Array(arr[..<mid]))
+    let right = mergeSort(Array(arr[mid...]))
+    return merge(left, right)
+}
+
+func merge(_ left: [Int], _ right: [Int]) -> [Int] {
+    var result: [Int] = []
+    var i = 0, j = 0
+    while i < left.count && j < right.count {
+        if left[i] <= right[j] { result.append(left[i]); i += 1 }
+        else { result.append(right[j]); j += 1 }
+    }
+    result.append(contentsOf: left[i...])
+    result.append(contentsOf: right[j...])
+    return result
+}
+
+// Quick sort — in-place, average O(n log n)
+func quickSort(_ arr: inout [Int], _ low: Int, _ high: Int) {
+    guard low < high else { return }
+    let pivot = arr[high]
+    var i = low
+    for j in low..<high where arr[j] < pivot {
+        arr.swapAt(i, j)
+        i += 1
+    }
+    arr.swapAt(i, high)
+    quickSort(&arr, low, i - 1)
+    quickSort(&arr, i + 1, high)
+}
+
+// Built-in — use this unless the interviewer asks you to implement one
+let sorted = [5, 3, 1, 4].sorted()
+</code></pre>
+    </section>
+
+    <section class="card" id="searching">
+      <h2>Binary Search</h2>
+      <pre><code class="language-swift">func binarySearch(_ arr: [Int], _ target: Int) -> Int? {
+    var low = 0, high = arr.count - 1
+    while low <= high {
+        let mid = low + (high - low) / 2   // avoids overflow
+        if arr[mid] == target { return mid }
+        if arr[mid] < target { low = mid + 1 }
+        else { high = mid - 1 }
+    }
+    return nil
+}
+
+// Search in rotated sorted array
+func searchRotated(_ nums: [Int], _ target: Int) -> Int? {
+    var low = 0, high = nums.count - 1
+    while low <= high {
+        let mid = (low + high) / 2
+        if nums[mid] == target { return mid }
+        if nums[low] <= nums[mid] {
+            if nums[low] <= target && target < nums[mid] { high = mid - 1 }
+            else { low = mid + 1 }
+        } else {
+            if nums[mid] < target && target <= nums[high] { low = mid + 1 }
+            else { high = mid - 1 }
+        }
+    }
+    return nil
+}
+</code></pre>
+    </section>
+
+    <section class="card" id="two-pointers">
+      <h2>Two Pointers &amp; Sliding Window</h2>
+      <pre><code class="language-swift">// Two Sum on a sorted array — two pointers
+func twoSumSorted(_ nums: [Int], _ target: Int) -> (Int, Int)? {
+    var left = 0, right = nums.count - 1
+    while left < right {
+        let sum = nums[left] + nums[right]
+        if sum == target { return (left, right) }
+        if sum < target { left += 1 } else { right -= 1 }
+    }
+    return nil
+}
+
+// Longest substring without repeating characters — sliding window
+func lengthOfLongestSubstring(_ s: String) -> Int {
+    var seen: Set&lt;Character&gt; = []
+    var left = s.startIndex
+    var best = 0
+    var right = s.startIndex
+    while right < s.endIndex {
+        let char = s[right]
+        while seen.contains(char) {
+            seen.remove(s[left])
+            left = s.index(after: left)
+        }
+        seen.insert(char)
+        best = max(best, s.distance(from: left, to: right) + 1)
+        right = s.index(after: right)
+    }
+    return best
+}
+</code></pre>
+    </section>
+
+    <section class="card" id="recursion">
+      <h2>Recursion &amp; Backtracking</h2>
+      <pre><code class="language-swift">// Subsets (power set)
+func subsets(_ nums: [Int]) -> [[Int]] {
+    var result: [[Int]] = [[]]
+    for num in nums {
+        result += result.map { $0 + [num] }
+    }
+    return result
+}
+
+// Permutations via backtracking
+func permute(_ nums: [Int]) -> [[Int]] {
+    var result: [[Int]] = []
+    var current: [Int] = []
+    var used = Array(repeating: false, count: nums.count)
+
+    func backtrack() {
+        if current.count == nums.count {
+            result.append(current)
+            return
+        }
+        for i in 0..<nums.count where !used[i] {
+            used[i] = true
+            current.append(nums[i])
+            backtrack()
+            current.removeLast()
+            used[i] = false
+        }
+    }
+    backtrack()
+    return result
+}
+</code></pre>
+    </section>
+
+    <section class="card" id="dp">
+      <h2>Dynamic Programming</h2>
+      <pre><code class="language-swift">// Climbing Stairs — bottom-up tabulation
+func climbStairs(_ n: Int) -> Int {
+    guard n > 2 else { return n }
+    var prev = 1, curr = 2
+    for _ in 3...n {
+        (prev, curr) = (curr, prev + curr)
+    }
+    return curr
+}
+
+// Coin Change — minimum coins to make an amount
+func coinChange(_ coins: [Int], _ amount: Int) -> Int {
+    var dp = Array(repeating: amount + 1, count: amount + 1)
+    dp[0] = 0
+    for total in 1...amount {
+        for coin in coins where coin <= total {
+            dp[total] = min(dp[total], dp[total - coin] + 1)
+        }
+    }
+    return dp[amount] > amount ? -1 : dp[amount]
+}
+
+// Longest Common Subsequence — memoized top-down
+func longestCommonSubsequence(_ a: String, _ b: String) -> Int {
+    let a = Array(a), b = Array(b)
+    var memo = [[Int: Int]](repeating: [:], count: a.count + 1)
+
+    func lcs(_ i: Int, _ j: Int) -> Int {
+        if i == a.count || j == b.count { return 0 }
+        if let cached = memo[i][j] { return cached }
+        let result: Int
+        if a[i] == b[j] {
+            result = 1 + lcs(i + 1, j + 1)
+        } else {
+            result = max(lcs(i + 1, j), lcs(i, j + 1))
+        }
+        memo[i][j] = result
+        return result
+    }
+    return lcs(0, 0)
+}
+</code></pre>
+    </section>
+
+    <section class="card" id="problems">
+      <h2>Worked Interview Problems</h2>
+
+      <div class="sub">
+        <h3>Two Sum</h3>
+        <pre><code class="language-swift">func twoSum(_ nums: [Int], _ target: Int) -> [Int] {
+    var seen: [Int: Int] = [:]   // value -> index
+    for (i, num) in nums.enumerated() {
+        if let j = seen[target - num] { return [j, i] }
+        seen[num] = i
+    }
+    return []
+}
+</code></pre>
+      </div>
+
+      <div class="sub">
+        <h3>Valid Parentheses</h3>
+        <pre><code class="language-swift">func isValid(_ s: String) -> Bool {
+    let pairs: [Character: Character] = [")": "(", "]": "[", "}": "{"]
+    var stack: [Character] = []
+    for char in s {
+        if let opener = pairs[char] {
+            if stack.popLast() != opener { return false }
+        } else {
+            stack.append(char)
+        }
+    }
+    return stack.isEmpty
+}
+</code></pre>
+      </div>
+
+      <div class="sub">
+        <h3>Merge Intervals</h3>
+        <pre><code class="language-swift">func merge(_ intervals: [[Int]]) -> [[Int]] {
+    let sorted = intervals.sorted { $0[0] < $1[0] }
+    var result: [[Int]] = []
+    for interval in sorted {
+        if let last = result.last, interval[0] <= last[1] {
+            result[result.count - 1][1] = max(last[1], interval[1])
+        } else {
+            result.append(interval)
+        }
+    }
+    return result
+}
+</code></pre>
+      </div>
+
+      <div class="sub">
+        <h3>Number of Islands</h3>
+        <pre><code class="language-swift">func numIslands(_ grid: [[Character]]) -> Int {
+    var grid = grid
+    var count = 0
+    let rows = grid.count, cols = grid[0].count
+
+    func sink(_ r: Int, _ c: Int) {
+        guard r >= 0, r < rows, c >= 0, c < cols, grid[r][c] == "1" else { return }
+        grid[r][c] = "0"
+        sink(r + 1, c); sink(r - 1, c); sink(r, c + 1); sink(r, c - 1)
+    }
+
+    for r in 0..<rows {
+        for c in 0..<cols where grid[r][c] == "1" {
+            count += 1
+            sink(r, c)
+        }
+    }
+    return count
+}
+</code></pre>
+      </div>
+
+      <div class="sub">
+        <h3>LRU Cache</h3>
+        <pre><code class="language-swift">final class LRUCache {
+    private final class Node {
+        let key: Int
+        var value: Int
+        var prev: Node?
+        var next: Node?
+        init(_ key: Int, _ value: Int) { self.key = key; self.value = value }
+    }
+
+    private let capacity: Int
+    private var map: [Int: Node] = [:]
+    private let head = Node(-1, -1)
+    private let tail = Node(-1, -1)
+
+    init(_ capacity: Int) {
+        self.capacity = capacity
+        head.next = tail
+        tail.prev = head
+    }
+
+    private func remove(_ node: Node) {
+        node.prev?.next = node.next
+        node.next?.prev = node.prev
+    }
+
+    private func insertFront(_ node: Node) {
+        node.next = head.next
+        node.prev = head
+        head.next?.prev = node
+        head.next = node
+    }
+
+    func get(_ key: Int) -> Int {
+        guard let node = map[key] else { return -1 }
+        remove(node)
+        insertFront(node)
+        return node.value
+    }
+
+    func put(_ key: Int, _ value: Int) {
+        if let existing = map[key] { remove(existing) }
+        let node = Node(key, value)
+        map[key] = node
+        insertFront(node)
+        if map.count > capacity, let lru = tail.prev, lru !== head {
+            remove(lru)
+            map.removeValue(forKey: lru.key)
+        }
+    }
+}
+</code></pre>
+      </div>
+
+      <div class="sub">
+        <h3>Kth Largest Element</h3>
+        <pre><code class="language-swift">// O(n log k) using a fixed-size min-heap: keep only the k largest seen so far.
+func findKthLargest(_ nums: [Int], _ k: Int) -> Int {
+    var heap = MinHeap&lt;Int&gt;()
+    for num in nums {
+        heap.insert(num)
+        if heap.count > k { _ = heap.extractMin() }
+    }
+    return heap.peek ?? -1
+}
+
+// Simpler to reach for under time pressure: sort and index, O(n log n).
+func findKthLargestSimple(_ nums: [Int], _ k: Int) -> Int {
+    nums.sorted(by: >)[k - 1]
+}
+</code></pre>
+      </div>
+    </section>
+
+    <section class="card" id="gotchas">
+      <h2>Swift-Specific Gotchas</h2>
+      <ul>
+        <li><strong>String indexing isn't O(1).</strong> <code class="inline">s[s.index(s.startIndex, offsetBy: i)]</code> walks the string. Convert to <code class="inline">Array(s)</code> once if you need repeated random access.</li>
+        <li><strong>Copy-on-write.</strong> Assigning an <code class="inline">Array</code>/<code class="inline">Dictionary</code> to a new variable doesn't copy memory until one side mutates — useful to know when reasoning about space complexity out loud.</li>
+        <li><strong>Class vs struct for nodes.</strong> Linked lists, trees, and graphs need reference semantics so multiple pointers can alias the same node — always model nodes as <code class="inline">class</code>, not <code class="inline">struct</code>.</li>
+        <li><strong>Overflow.</strong> Swift traps on integer overflow by default (<code class="inline">Int</code> addition, etc.). Use <code class="inline">low + (high - low) / 2</code> for binary search midpoints, not <code class="inline">(low + high) / 2</code>.</li>
+        <li><strong>Optionals over sentinels.</strong> Return <code class="inline">nil</code> instead of <code class="inline">-1</code> where possible — it documents "no answer" in the type system and interviewers notice.</li>
+        <li><strong>Identity vs. equality.</strong> Use <code class="inline">===</code> to compare object identity (e.g., detecting a cycle by reference), and <code class="inline">==</code> for value equality.</li>
+        <li><strong>No built-in heap/deque.</strong> The standard library ships <code class="inline">Array</code>, <code class="inline">Dictionary</code>, <code class="inline">Set</code> — be ready to hand-roll a heap (shown above) since interviewers know Swift lacks one out of the box.</li>
+      </ul>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  Built for interview prep. Fork it, extend it, and practice by rewriting the examples from scratch.
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/swift.min.js"></script>
+<script>hljs.highlightAll();</script>
+</body>
+</html>
